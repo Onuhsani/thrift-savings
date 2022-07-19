@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Transaction;
 
 class WithdrawMoneyController extends Controller
 {
@@ -26,21 +27,22 @@ class WithdrawMoneyController extends Controller
         $username = Auth::user()->username;
         $record = User::where('username', $username)->first();
         $balance = (int)$record->balance;
+        $withdrawable = (int)$record->withdrawable;
         $charge = (int)$record->charge;
 
-        if($balance >= ($data - $charge)){
+        if($withdrawable >= $data){
             User::where('username', $username)->update(['balance' => $balance - $data]);
-            User::where('username', $username)->update(['withdrawable' => 0]);
-            $balance = (int)$record->balance;
-            if($balance == 0){
+            //User::where('username', $username)->update(['withdrawable' => 0]);
+            $newbalance = (int)$record->balance;
+            if($newbalance == 0){
                 User::where('username', $username)->update(['withdrawable' => 0]);
                 User::where('username', $username)->update(['charge' => 0]);
-
+                Transaction::create(['user' => $username, 'type' => 'withdrawal', 'amount' => $data]);
                 return redirect()->back()->with('message', 'Withdrawal has been made sucessfully');
             }
-                User::where('username', $username)->update(['withdrawable' => $balance - $data]);
-                User::where('username', $username)->update(['charge' => $charge]);
-
+                User::where('username', $username)->update(['withdrawable' => $withdrawable - $data]);
+                Transaction::create(['user' => $username, 'type' => 'withdrawal', 'amount' => $data]);
+                
                 return redirect()->back()->with('message', 'Withdrawal has been made sucessfully');
             
         }else{

@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Transaction;
 
 class DepositMoneyController extends Controller
 {
@@ -32,11 +33,14 @@ class DepositMoneyController extends Controller
             User::where('username', $username)->update(['withdrawable' => 0]);
             User::where('username', $username)->update(['charge' => $data]);
 
+            Transaction::create(['user' => $username, 'type' => 'deposit', 'amount' => $data]);
+
             return redirect()->back()->with('message', 'Top up made sucessfully');
         }else{
             User::where('username', $username)->update(['balance' => $balance + $data]);
             User::where('username', $username)->update(['withdrawable' => $withdrawable + $data]);
-            
+
+            Transaction::create(['user' => $username, 'type' => 'deposit', 'amount' => $data]);
             return redirect()->back()->with('message', 'Top up made sucessfully');
         }
         
