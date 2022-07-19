@@ -35,6 +35,7 @@ class TransferMoneyController extends Controller
         $username = Auth::user()->username;
         $record = User::where('username', $username)->first();
         $balance = (int)$record->balance;
+        $id = (int)$record->id;
         $withdrawable = (int)$record->withdrawable;
 
         if( ($recipient !== null) && ($withdrawable >= $data) ){
@@ -49,7 +50,7 @@ class TransferMoneyController extends Controller
             User::where('username', $username)->update(['balance' => $balance - $data]);
             User::where('username', $username)->update(['withdrawable' => $withdrawable - $data]);
 
-            Transaction::create(['user' => $username, 'type' => 'transfer', 'amount' => $data]);
+            Transaction::create(['user_id' => $id, 'type' => 'transfer', 'amount' => $data]);
             return redirect()->back()->with('message', 'Transfer made successfully');
 
         }else{

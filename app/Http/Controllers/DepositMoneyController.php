@@ -28,19 +28,20 @@ class DepositMoneyController extends Controller
         $record = User::where('username', $username)->first();
         $balance = (int)$record->balance;
         $withdrawable = (int)$record->withdrawable;
+        $id = (int)$record->id;
         if($balance == 0){
             User::where('username', $username)->update(['balance' => $balance + $data]);
             User::where('username', $username)->update(['withdrawable' => 0]);
             User::where('username', $username)->update(['charge' => $data]);
 
-            Transaction::create(['user' => $username, 'type' => 'deposit', 'amount' => $data]);
+            Transaction::create(['user_id' => $id, 'type' => 'deposit', 'amount' => $data]);
 
             return redirect()->back()->with('message', 'Top up made sucessfully');
         }else{
             User::where('username', $username)->update(['balance' => $balance + $data]);
             User::where('username', $username)->update(['withdrawable' => $withdrawable + $data]);
 
-            Transaction::create(['user' => $username, 'type' => 'deposit', 'amount' => $data]);
+            Transaction::create(['user_id' => $id, 'type' => 'deposit', 'amount' => $data]);
             return redirect()->back()->with('message', 'Top up made sucessfully');
         }
         

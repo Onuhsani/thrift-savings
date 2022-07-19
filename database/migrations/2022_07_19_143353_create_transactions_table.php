@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('user');
-            //$table -> foreign('user')->references('username')->on('users')->onDelete('cascade');
+            $table->string('user_id');
+            $table -> foreign('user_id')->references('users_id')->on('users')->onDelete('cascade');
             $table -> string('type');
             $table -> string('amount');
             $table->timestamps();

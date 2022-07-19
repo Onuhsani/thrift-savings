@@ -27,6 +27,7 @@ class WithdrawMoneyController extends Controller
         $username = Auth::user()->username;
         $record = User::where('username', $username)->first();
         $balance = (int)$record->balance;
+        $id = (int)$record->id;
         $withdrawable = (int)$record->withdrawable;
         $charge = (int)$record->charge;
 
@@ -37,11 +38,11 @@ class WithdrawMoneyController extends Controller
             if($newbalance == 0){
                 User::where('username', $username)->update(['withdrawable' => 0]);
                 User::where('username', $username)->update(['charge' => 0]);
-                Transaction::create(['user' => $username, 'type' => 'withdrawal', 'amount' => $data]);
+                Transaction::create(['user_id' => $id, 'type' => 'Withdrawal', 'amount' => $data]);
                 return redirect()->back()->with('message', 'Withdrawal has been made sucessfully');
             }
                 User::where('username', $username)->update(['withdrawable' => $withdrawable - $data]);
-                Transaction::create(['user' => $username, 'type' => 'withdrawal', 'amount' => $data]);
+                Transaction::create(['user_id' => $id, 'type' => 'Withdrawal', 'amount' => $data]);
                 
                 return redirect()->back()->with('message', 'Withdrawal has been made sucessfully');
             
