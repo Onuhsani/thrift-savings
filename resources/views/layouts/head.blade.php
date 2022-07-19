@@ -32,7 +32,7 @@
       <div class="sidebar-toggle-box">
         <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
       </div>
-        <a href="/home" class="logo"><b>Adashi<span>App</span></b></a>
+        <a href="{{ route('dashboard') }}" class="logo"><b>Adashi<span>App</span></b></a>
       <div class="nav notify-row" id="top_menu">
         
       </div>

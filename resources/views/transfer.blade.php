@@ -7,7 +7,7 @@
           <div class="col-lg-12" style="margin-top:0px; width:100%">
           
           <div class="myform" class="form-control" style="width:800px; margin-left:50px; height:400px; background-color:white; padding:10px; ">
-                <form method="post" action="{{route('deposit')}}" entype="multipart/form-data" style="width:400px; display:block; margin:auto">
+                <form method="post" action="{{ route('transfer') }}" entype="multipart/form-data" style="width:400px; display:block; margin:auto">
                     @csrf
                     <h3 style="text-align:center; color:brown">Wanna make some funds transfer?</h3>
                     @csrf

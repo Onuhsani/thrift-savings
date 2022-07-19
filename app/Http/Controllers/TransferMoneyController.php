@@ -16,13 +16,15 @@ class TransferMoneyController extends Controller
         return view('transfer');
     }
 
-    public function transferMoney()
+    public function transferMoney(Request $request)
     {
+
+        //dd();
         $request->validate([
             'transfer' => 'required|max:10',
             'username' =>'required|max:200'
         ]);
-        $data = (int)$request->deposit;
+        $data = (int)$request->transfer;
         $beneficiary = $request->username;
 
         $users = User::where('username', $beneficiary)->first();
@@ -35,9 +37,11 @@ class TransferMoneyController extends Controller
 
         if( ($recipient !== null) && ($balance > $data) ){
             $benrecord = $record = User::where('username', $beneficiary)->first();
-            $benbalance = $benrecord->balance;
+            $benbalance = (int)$benrecord->balance;
+            $benwithdrawable = (int)$benrecord->withdrawable;
     
             User::where('username', $beneficiary)->update(['balance' => $benbalance + $data]);
+            User::where('username', $beneficiary)->update(['withdrawable' => $benwithdrawable + $data]);
 
             User::where('username', $username)->update(['balance' => $balance - $data]);
 
