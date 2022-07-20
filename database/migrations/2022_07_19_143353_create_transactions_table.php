@@ -14,9 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('transactions', function (Blueprint $table) {
-            $table->id();
-            $table->string('user_id');
-            $table -> foreign('user_id')->references('users_id')->on('users')->onDelete('cascade');
+            $table->increments('id');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table -> string('type');
             $table -> string('amount');
             $table->timestamps();
